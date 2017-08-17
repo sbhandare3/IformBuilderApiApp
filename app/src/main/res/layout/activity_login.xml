@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.shreyas.i_form_builderapp.LoginActivity">
+    tools:context="com.example.shreyas.i_form_builderapp.Activities.LoginActivity">
 
     <EditText
         android:layout_width="0dp"

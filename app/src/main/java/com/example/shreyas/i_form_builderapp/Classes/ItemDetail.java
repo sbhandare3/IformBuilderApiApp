@@ -1,9 +1,10 @@
-package com.example.shreyas.i_form_builderapp;
+package com.example.shreyas.i_form_builderapp.Classes;
 
 /**
  * Created by shreyas on 8/15/2017.
  */
 
+// class to store item detail
 public class ItemDetail {
 
     private String I_id;

@@ -34,6 +34,7 @@ import com.nimbusds.jwt.SignedJWT;
 @SuppressWarnings("deprecation")
 public class AccessToken {
 
+    // generated signed JWT, sends it to server, receives token, parses it and return back.
     public static String getToken(String clientKey, String clientSecret, String URL) {
 
         String token = "";
@@ -80,24 +81,10 @@ public class AccessToken {
             HttpEntity entity = response.getEntity();
             String responseBody = EntityUtils.toString(entity);
             token = responseBody.substring(17, 57); // token is always in the
-            // same place of the same
-            // length
-            //EntityUtils.consume(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            //try {
-                /*
-                if (response != null) // close response
-                    response.close();*/
                 httpClient.getConnectionManager().shutdown(); // close client
-            //} catch (IOException e) {
-                //e.printStackTrace();
-            //}
         }
 
         return token;

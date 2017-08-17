@@ -1,4 +1,4 @@
-package com.example.shreyas.i_form_builderapp;
+package com.example.shreyas.i_form_builderapp.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.shreyas.i_form_builderapp.APIServices.AccessToken;
+import com.example.shreyas.i_form_builderapp.R;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
         mPass = (EditText) findViewById(R.id.edit_password);
     }
 
+    // validate/authenticate user with username and password
     public void validateAndContinue(View view){
         if(mUname.getText().toString().equals("") && mPass.getText().toString().equals("")){
             Toast.makeText(LoginActivity.this,"Enter Username and Password", Toast.LENGTH_SHORT).show();
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // if user is authenticated with username and password, get token and start listactvity
     private class gettingToken extends AsyncTask<Void,Void,Void> {
 
         private ProgressDialog progressDialog;
@@ -76,6 +79,5 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
-
 
 }

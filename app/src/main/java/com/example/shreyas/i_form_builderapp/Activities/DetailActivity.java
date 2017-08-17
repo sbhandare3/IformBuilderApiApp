@@ -1,25 +1,19 @@
-package com.example.shreyas.i_form_builderapp;
+package com.example.shreyas.i_form_builderapp.Activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.shreyas.i_form_builderapp.APIServices.APIService;
+import com.example.shreyas.i_form_builderapp.R;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-
-import static com.example.shreyas.i_form_builderapp.ListActivity.itemDetails;
 
 public class DetailActivity extends Activity {
 
@@ -43,16 +37,17 @@ public class DetailActivity extends Activity {
         if(intent.hasExtra("position")) {
             pos = intent.getIntExtra("position",0);
             //service.generateDetailURL(pos);
-            setTitle("ID: "+itemDetails.get(pos).getItemId());
-            nameView.setText(itemDetails.get(pos).getName());
-            ageView.setText(itemDetails.get(pos).getAge());
-            dateView.setText(itemDetails.get(pos).getDate());
-            phoneView.setText(itemDetails.get(pos).getPhone());
+            setTitle("ID: "+ ListActivity.itemDetails.get(pos).getItemId());
+            nameView.setText(ListActivity.itemDetails.get(pos).getName());
+            ageView.setText(ListActivity.itemDetails.get(pos).getAge());
+            dateView.setText(ListActivity.itemDetails.get(pos).getDate());
+            phoneView.setText(ListActivity.itemDetails.get(pos).getPhone());
             new getItemImage().execute();
 
         }
     }
 
+    // load image in the background
     private class getItemImage extends AsyncTask<Void,Void,Void> {
         Bitmap image;
         URL url = null;
@@ -61,10 +56,8 @@ public class DetailActivity extends Activity {
         protected Void doInBackground(Void... params) {
 
             try {
-                url = new URL(itemDetails.get(pos).getImage());
+                url = new URL(ListActivity.itemDetails.get(pos).getImage());
                 image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e){
                 e.printStackTrace();
             }

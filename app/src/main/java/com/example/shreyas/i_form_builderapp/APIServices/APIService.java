@@ -1,14 +1,11 @@
 package com.example.shreyas.i_form_builderapp.APIServices;
 
-import com.example.shreyas.i_form_builderapp.ItemDetail;
+import com.example.shreyas.i_form_builderapp.Classes.ItemDetail;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,30 +23,34 @@ import java.util.Collections;
 @SuppressWarnings("deprecation")
 public class APIService {
 
-    String url = "https://app.iformbuilder.com/exzact/api/profiles/470103/pages/3639672/records";
-    ArrayList<String> idList;
-    StringBuilder builder;
+    private String url;
+    private ArrayList<String> idList;
+    private StringBuilder builder;
 
+    // initialize objects, vairables
     public APIService(){
+        url = "https://app.iformbuilder.com/exzact/api/profiles/470103/pages/3639672/records";
         idList = new ArrayList<>();
         builder = new StringBuilder();
     }
 
+    // generate URL to get ID list
     public void generateIdURL(String token){
         url+="?ACCESS_TOKEN="+token+"&VERSION=5.1";
     }
 
+    // generate URL to get Detail List
     public void generateDetailURL(String token, int pos){
         int id = (pos+1)*3;
         url = url+"/"+id+"/feed?ACCESS_TOKEN="+token+"&VERSION=5.1&FORMAT=json";
     }
 
+    // Get Http response
     public void getResponse(){
         try {
 
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpGet getRequest = new HttpGet(url);
-            //getRequest.addHeader("accept", "application/json");
 
             HttpResponse response = httpClient.execute(getRequest);
 
@@ -64,19 +65,7 @@ public class APIService {
                 builder.append(line).append("\n");
             }
 
-            /*
-            output = EntityUtils.toString((HttpEntity) response);
-            System.out.println("Output from Server .... \n");
-            while ((output = br.readLine()) != null) {
-                System.out.println(output);
-            }
-            */
-
             httpClient.getConnectionManager().shutdown();
-
-        } catch (ClientProtocolException e) {
-
-            e.printStackTrace();
 
         } catch (IOException e) {
 
@@ -85,6 +74,7 @@ public class APIService {
 
     }
 
+    // get List of Ids from response
     public ArrayList<String> getIdFromResponse(){
         JSONObject jsonObj;
         try {
@@ -103,8 +93,8 @@ public class APIService {
         return idList;
     }
 
+    // get details of specific id from response
     public ItemDetail getItemDetailFromResponse(){
-        //ArrayList<ItemDetail> itemDetails = new ArrayList<>();
         ItemDetail newItem = null;
         JSONArray jsonArray;
 
