@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.shreyas.i_form_builderapp.APIServices.APIService;
+import com.example.shreyas.i_form_builderapp.APIServices.AccessToken;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -18,7 +18,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         mUname = (EditText) findViewById(R.id.edit_username);
         mPass = (EditText) findViewById(R.id.edit_password);
@@ -35,35 +35,44 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this,"Enter Password", Toast.LENGTH_SHORT).show();
         }
         else if(mUname.getText().toString().equals("admin") && mPass.getText().toString().equals("admin")){
-            Toast.makeText(LoginActivity.this,"Success", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LoginActivity.this,"Success", Toast.LENGTH_SHORT).show();
             // generate token for 60 min
-            new synching().execute();
+            new gettingToken().execute();
         }
         else{
             Toast.makeText(LoginActivity.this,"Please Enter Valid Username and Password", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private class synching extends AsyncTask<Void,Void,Void> {
+    private class gettingToken extends AsyncTask<Void,Void,Void> {
 
         private ProgressDialog progressDialog;
+        String accessToken = null;
 
         @Override
         protected Void doInBackground(Void... params) {
+            String clientKey = "481c7d7bf5652c17c3e2404773c32b117604d788";
+            String clientSecret = "2e6fa3b9cf28f945f844a1ab2fa235b08d66be07";
+            String URL = "https://app.iformbuilder.com/exzact/api/oauth/token";
+            accessToken = AccessToken.getToken(clientKey, clientSecret, URL);
+            //System.out.println("accessToken = " + accessToken);
             return null;
         }
 
         @Override
         protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(LoginActivity.this,null,"Synchronizing");
+            progressDialog = ProgressDialog.show(LoginActivity.this,null,"Authenticating..");
             super.onPreExecute();
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            progressDialog = ProgressDialog.show(LoginActivity.this,null,"Success!");
             progressDialog.dismiss();
-            startActivity(new Intent(LoginActivity.this,ListActivity.class));
+            Intent intent = new Intent(LoginActivity.this,ListActivity.class);
+            intent.putExtra("token",accessToken);
+            startActivity(intent);
             finish();
         }
     }

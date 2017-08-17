@@ -17,11 +17,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by shreyas on 8/15/2017.
  */
 
+@SuppressWarnings("deprecation")
 public class APIService {
 
     String url = "https://app.iformbuilder.com/exzact/api/profiles/470103/pages/3639672/records";
@@ -33,13 +35,13 @@ public class APIService {
         builder = new StringBuilder();
     }
 
-    public void generateIdURL(){
-        url+="?ACCESS_TOKEN=c4ddc0f068620718bc85d8fb4413122580716ef3&VERSION=5.1";
+    public void generateIdURL(String token){
+        url+="?ACCESS_TOKEN="+token+"&VERSION=5.1";
     }
 
-    public void generateDetailURL(int pos){
+    public void generateDetailURL(String token, int pos){
         int id = (pos+1)*3;
-        url = url+"/"+id+"/feed?ACCESS_TOKEN=c4ddc0f068620718bc85d8fb4413122580716ef3&VERSION=5.1&FORMAT=json";
+        url = url+"/"+id+"/feed?ACCESS_TOKEN="+token+"&VERSION=5.1&FORMAT=json";
     }
 
     public void getResponse(){
@@ -91,17 +93,19 @@ public class APIService {
             for(int i = 0; i < recordArray.length(); i++)
             {
                 JSONObject objects = recordArray.getJSONObject(i);
-                idList.add(Integer.toString(objects.getInt("ID")));
+                idList.add("Id: "+Integer.toString(objects.getInt("ID")));
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Collections.reverse(idList);
         return idList;
     }
 
-    public ArrayList<ItemDetail> getItemDetailFromResponse(){
-        ArrayList<ItemDetail> itemDetails = new ArrayList<>();
+    public ItemDetail getItemDetailFromResponse(){
+        //ArrayList<ItemDetail> itemDetails = new ArrayList<>();
+        ItemDetail newItem = null;
         JSONArray jsonArray;
 
         try {
@@ -109,7 +113,7 @@ public class APIService {
             JSONObject jsonObject = jsonArray.getJSONObject(0);
             JSONObject jsonObject1 = jsonObject.getJSONObject("record");
 
-            ItemDetail newItem = new ItemDetail();
+            newItem = new ItemDetail();
             newItem.setItemId(jsonObject1.getString("ID"));
             newItem.setName(jsonObject1.getString("my_name"));
             newItem.setPhone(jsonObject1.getString("my_phone"));
@@ -123,7 +127,7 @@ public class APIService {
             e.printStackTrace();
         }
 
-        return itemDetails;
+        return newItem;
     }
 
 }
